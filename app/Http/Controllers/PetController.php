@@ -24,7 +24,7 @@ class PetController extends Controller
             'Cache-Control' => 'no-cache',
             'Client-ID'     =>  config('app.client_id'), 
             'API-Key'       =>  config('app.apiKey'), 
-            'Content-Type'  => 'application/json' 
+            'Content-Type'  => 'application/json', 
         ];
     }
 
@@ -41,7 +41,7 @@ class PetController extends Controller
         }else{
             $this->data['filters']['petFilter']['status'] = old('filters')['petFilter']['status'];
         }
-
+        
         $response = $this->client->get('https://petstore3.swagger.io/api/v3/pet/findByStatus?status='.$this->data['filters']['petFilter']['status'], [
                 'headers' => $this->headers 
         ]);
