@@ -22,8 +22,8 @@ class PetController extends Controller
 
         $this->headers = [
             'Cache-Control' => 'no-cache',
-            'Client-ID'     => 'a1b2c3d4e5f6g7h8i9j0', 
-            'API-Key'       => 'ZYXW-9876-VUTS-5432-RQPO', 
+            'Client-ID'     =>  config('app.client_id'), 
+            'API-Key'       =>  config('app.apiKey'), 
             'Content-Type'  => 'application/json' 
         ];
     }
@@ -36,8 +36,7 @@ class PetController extends Controller
         $petId = old('filters.petFilter.id');
         $petStatus = old('filters.petFilter.status');
     
-       
-        if( old('filters') == null){
+        if(old('filters') == null){
             $this->data['filters']['petFilter']['status'] = 'available';
         }else{
             $this->data['filters']['petFilter']['status'] = old('filters')['petFilter']['status'];
@@ -45,17 +44,16 @@ class PetController extends Controller
 
         $response = $this->client->get('https://petstore3.swagger.io/api/v3/pet/findByStatus?status='.$this->data['filters']['petFilter']['status'], [
                 'headers' => $this->headers 
-            ]);
+        ]);
 
             
-            $responseBody = $response->getBody()->getContents();
+        $responseBody = $response->getBody()->getContents();
 
-            $responseObject = json_decode($responseBody);
-          
-            $pet = new Pet();
-
-           $pets = collect($responseObject)->map(function ($petData) {
+        $responseObject = json_decode($responseBody);
         
+        $pet = new Pet();
+
+        $pets = collect($responseObject)->map(function ($petData) {
             return new Pet([
                 'id' => $petData->id ?? null, // Jeśli nie ma id, przypisujemy null
                 'name' => $petData->name ?? 'Nieznane', // Jeśli nie ma name, przypisujemy domyślną wartość
@@ -65,11 +63,10 @@ class PetController extends Controller
                 'tags' => $petData->tags ?? [], // Jeśli nie ma tagów, przypisujemy pustą tablicę
             ]);
         });
-            $this->data['pets']  = $pets;
-            $this->data['petStatusList']  = $pet->statusList;
+
+        $this->data['pets']  = $pets;
+        $this->data['petStatusList']  = $pet->statusList;
          
-        
-        
         return view('pet.index', ['data' => $this->data]);
     }
 
@@ -129,8 +126,6 @@ class PetController extends Controller
      */
     public function show(string $id)
     {
-        
-     
             $response = $this->client->get('https://petstore3.swagger.io/api/v3/pet/'.$id, [
                 'headers' => $this->headers
             ]);
@@ -148,11 +143,6 @@ class PetController extends Controller
             ]);
     
             return view('pet.view', ['data' => $this->data]);
-    
-
-
-        
-       
     }
 
     /**
