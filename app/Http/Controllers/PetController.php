@@ -55,12 +55,12 @@ class PetController extends Controller
 
         $pets = collect($responseObject)->map(function ($petData) {
             return new Pet([
-                'id' => $petData->id ?? null, // Jeśli nie ma id, przypisujemy null
-                'name' => $petData->name ?? 'Nieznane', // Jeśli nie ma name, przypisujemy domyślną wartość
-                'status' => $petData->status ?? 'Nieznany', // Jeśli nie ma statusu, przypisujemy domyślną wartość
-                'category' => $petData->category ?? null, // Jeśli nie ma kategorii, przypisujemy null
-                'photoUrls' => $petData->photoUrls ?? [], // Jeśli nie ma zdjęć, przypisujemy pustą tablicę
-                'tags' => $petData->tags ?? [], // Jeśli nie ma tagów, przypisujemy pustą tablicę
+                'id' => $petData->id ?? null, 
+                'name' => $petData->name ?? 'Nieznane', 
+                'status' => $petData->status ?? 'Nieznany', 
+                'category' => $petData->category ?? null, 
+                'photoUrls' => $petData->photoUrls ?? [], 
+                'tags' => $petData->tags ?? [],
             ]);
         });
 
